@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+	  xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="UTF-8">
+		<title>login</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="../../css/tttare-login.css" />
+	<body>
+		<div class="head">
+			<div class="logo"></div>
+		</div>
+		<div class="main">
+			<div class="login-form" id="app">
+				<div class="login-box">
+					<div></div>
+					<div class="login-tab login-tab-l">
+                    	<a href="javascript:void(0)" clstag="pageclick|keycount|login_pc_201804112|9" class="checked" style="outline: rgb(109, 109, 109) none 0px;"> 登录</a>
+                	</div>
+                	<div class="login-tab login-tab-r">
+                    	<a href="/user/logon" clstag="pageclick|keycount|login_pc_201804112|10" class="" style="outline: rgb(109, 109, 109) none 0px;">注册</a>
+                	</div>
+                	<div class="msg-wrap" v-html="msg">
+	                </div>
+	                <div class="mc">
+						<div class="form">
+							<div class="item item-fore1">
+								<input type="text" th:value="${key}"
+									   ref="key" style="display: none">
+		                        <label for="loginname" class="login-label name-label"></label>
+		                        <input id="loginname" type="text"  v-model="username" class="itxt" name="loginname" tabindex="1" autocomplete="off" value="" placeholder="用户名">
+		                        <span class="clear-btn"></span>
+								<a style="color : red" v-text="usernameMsg"></a>
+		                    </div>
+							<div id="entry" class="item item-fore2" style="visibility: visible;">
+			                    <label class="login-label pwd-label" for="nloginpwd"></label>
+			                    <input id="nloginpwd" type="password" v-model="password" name="nloginpwd" class="itxt itxt-error" tabindex="2" autocomplete="off" placeholder="密码">
+			                    <span class="clear-btn"></span>
+								<a style="color : red" v-text="passwordMsg"></a>
+			                    <span class="capslock" style="display: none;"><b></b>大小写锁定已打开</span>
+		                	</div>
+							<div>
+								<input type="text" class="verifyInput" v-model="verifyCode" placeholder="验证码"/>
+								<img class="verifyImage" alt="验证码" onclick="this.src='/user/getVerifyCode?d='+new Date()*1"
+									 src="/user/getVerifyCode"><br/>
+								<a style="color : red" v-text="verifyCodeMsg"></a>
+							</div>
+		                	<div>
+								<button @click="handleSubmit" class="loginBtn"/>
+							</div>
+						</div>	                	
+	                </div>
+				</div>
+
+			</div>
+		</div>
+		<div class="footer"></div>
+		<script type="text/javascript" src="../../js/vue.js" ></script>
+		<script type="text/javascript" src="../../js/axios.min.js" ></script>
+		<script type="text/javascript" src="../../js/crypto-js.js" ></script>
+		<script>
+            var vm = new Vue({
+                el:'#app',
+                data : {
+					username: "",
+					password: "",
+                    msg: "",
+                    usernameMsg: "",
+                    passwordMsg: "",
+                    verifyCode:'',
+                    verifyCodeMsg:''
+                },
+				methods:{
+                    handleSubmit() {
+						if(this.username.trim().length==0){
+                           this.usernameMsg = "用户名不能为空";
+                           return;
+						}
+                        if(this.username.trim().length>=32){
+                            this.usernameMsg = "用户名过长";
+                            return;
+                        }
+                        if(this.password.trim().length==0){
+                            this.passwordMsg = "密码不能为空";
+                            return;
+                        }
+                        if(this.password.trim().length>=32){
+                            this.passwordMsg = "密码过长";
+                            this.password = '';
+                            return;
+                        }
+                        if(this.verifyCode.trim().length==0){
+							this.verifyCodeMsg='验证码不能为空';
+							return;
+						}
+                        if(this.verifyCodeMsg.trim().length>=32){
+                            this.verifyCode='';
+                            this.verifyCodeMsg='验证码过长';
+                            return;
+                        }
+						//ajax请求
+                        this.post("/user/login",{
+                            username: this.username,
+                            password: this.encryptPassword(this.$refs.key.value,this.password),
+                            key: this.$refs.key.value,
+                            verifyCode: this.verifyCode
+                        });
+
+					},
+					post  : function(url,obj){
+                        axios({
+                            method: 'post',
+                            url: url,
+                            data: obj
+                        }).then((res)=>{
+							if(res.data.code == '000000'){
+							    window.location.href="/user/index";
+							}else{
+                            	this.msg = '<div class="msg-error"><b>'+res.data.desc+'</b></div>';
+							}
+                        });
+					},
+					//密码加密
+					encryptPassword :function ($key,$password) {
+                        var key = CryptoJS.enc.Utf8.parse($key);
+                        console.log("key:" + key + ",$key:" + $key);
+                        var password = CryptoJS.enc.Utf8.parse($password);
+                        var encrypted = CryptoJS.AES.encrypt(password, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+                        var encryptedPwd = encrypted.toString();
+                        return encryptedPwd;
+                    }
+				}
+            })
+
+		</script>
+	</body>
+</html>

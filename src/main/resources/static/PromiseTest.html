@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ES6异步Promise测试</title>
+</head>
+<body>
+
+<h1>Promise 是异步编程的一种解决方案，比传统的解决方案——回调函数和事件——更合理且更强大。</h1>
+<div id="app">
+    <button @click="test02('aaaaa')">测试按钮</button>
+
+</div>
+
+
+<script type="text/javascript" src="js/vue.js" ></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el:"#app",
+        data:{},
+        methods:{
+           test01 :function () {
+               var p = new Promise(function(resolve, reject){
+                   //做一些异步操作
+                   setTimeout(function(){
+                       console.log('执行完成');
+                       //resolve('随便什么数据');
+                       reject('失败了啊');
+                   }, 2000);
+               });
+               return p;
+           } ,
+            test02 :function (data) {
+                this.test01().then(function (data) {
+                    console.log('回调函数成功:'+data);
+                }).catch(function (reason) {
+                    console.log('回调函数失败:'+reason);
+                });
+            },
+            async function asyncTest01() {
+
+            }
+
+        },
+        mounted:{
+
+        }
+    })
+
+</script>
+
+</body>
+</html>
