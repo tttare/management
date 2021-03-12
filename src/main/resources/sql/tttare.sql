@@ -5,8 +5,8 @@ USE `management`;
 
 DROP TABLE IF EXISTS `tb_user`;
 
-CREATE TABLE `tb_user` (
-  `user_id` varchar(32) NOT NULL,
+CREATE TABLE `sys_user` (
+  `userid` varchar(32) NOT NULL,
   `username` varchar(32) DEFAULT NULL,
   `nickname` varchar(16) DEFAULT NULL,
   `password` varchar(64) DEFAULT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE `tb_user` (
   `avatar` varchar(32) DEFAULT NULL,
   `email` varchar(64) DEFAULT NULL,
   `status` int(1) DEFAULT NULL,
-  PRIMARY KEY (`user_id`) USING BTREE
+  PRIMARY KEY (`userid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `tb_role`;

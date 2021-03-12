@@ -78,6 +78,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label>选择日期：</label>
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="col-sm-1 control-label"><span style="color: red;font-weight: bold">＊</span>密码</label>
                     <div class="col-sm-4">
                         <input type="password" class="form-control" placeholder="至少8位，至多32位,并包含字母、数字和特殊字符中的两种" v-model="password" name="password">

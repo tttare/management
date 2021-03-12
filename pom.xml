@@ -67,12 +67,20 @@
 		</dependency>
 
 		<!--数据库连接依赖-->
+		<!--java连接mysql的依赖,需匹配本地mysql的版本-->
+		<!--版本过低-->
+		<!--<dependency>-->
+			<!--<groupId>mysql</groupId>-->
+			<!--<artifactId>mysql-connector-java</artifactId>-->
+			<!--<version>5.1.6</version>-->
+			<!--<scope>runtime</scope>-->
+		<!--</dependency>-->
+
+		<!--mysql版本升级-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<!--java连接mysql的依赖,需匹配本地mysql的版本-->
-			<version>5.1.6</version>
-			<scope>runtime</scope>
+			<version>8.0.23</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>

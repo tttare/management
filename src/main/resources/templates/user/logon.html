@@ -78,6 +78,22 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="col-sm-1 control-label">生日</label>
+                    <el-date-picker
+                            v-model="birthDate"
+                            type="date"
+                            placeholder="选择日期">
+                    </el-date-picker>
+                </div>
+
+                <div class="form-group"> 
+                     <label class="col-sm-1 control-label">所在地</label>
+                   <el-cascader size="medium" :options="options" v-model="selectedOptions" > <!--@change="handleChange"-->
+                   </el-cascader> 
+                </div>
+
+
+                <div class="form-group">
                     <label class="col-sm-1 control-label"><span style="color: red;font-weight: bold">＊</span>密码</label>
                     <div class="col-sm-4">
                         <input type="password" class="form-control" placeholder="至少8位，至多32位,并包含字母、数字和特殊字符中的两种" v-model="password" name="password">
@@ -145,11 +161,20 @@
 </div>
 
 
-<script type="text/javascript" src="/js/vue.js" ></script>
-<script type="text/javascript" src="/js/axios.min.js" ></script>
-<script type="text/javascript" src="/js/crypto-js.js" ></script>
-<script type="text/javascript" src="/js/md5.js" ></script>
+<script type="text/javascript" src="../../static/js/vue.js" th:src="@{/js/vue.js}" ></script>
+<script type="text/javascript" src="../../static/js/axios.min.js"  th:src="@{/js/axios.min.js}"></script>
+<script type="text/javascript" src="../../static/js/crypto-js.js" th:src="@{/js/crypto-js.js}"></script>
+<script type="text/javascript" src="../../static/js/md5.js"  th:src="@{/js/md5.js}"></script>
+<script type="text/javascript" src="../../static/data/data.json"  th:src="@{/data/data.json}"></script>
+
+
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
 <script type="text/javascript">
+
     var userReg= /^[A-Za-z0-9]{6,16}$/;
     var emailReg= /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
     var passwordReg= /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,32}$/;
@@ -158,6 +183,8 @@
         data : {
             email : "",
             passwordComfirm : "",
+            birthDate : "1995-06-01",
+            location :"",
             password:"",
             nickName:"",
             userName:"",
@@ -169,6 +196,15 @@
             emailCodeMsg:"",
             sendFlag:true,
             passwordComfirmMsg:'',
+            selectedOptions:'',
+            options:[{
+                value:"01",
+                label:"湖北",
+                children:[{
+                    value:"0101",
+                    label:"武汉"
+                }]
+            }],
             iconMsg:'',
             iconPath:'/img/personIcon.jpg',
             haveIcon:false,
@@ -294,20 +330,30 @@
                     type : type,
                     fileData :this.iconPath
                 }
+            },
+            locationSelectChange:function (value) {
+                console.log(value)
+            },
+            formatLocalInfo:function(){
+
             }
         },
         watch :{
             haveIcon:function (newVal) {
                 if(!newVal){
-                    this.iconPath = 'http://hbimg.b0.upaiyun.com/c5440470619c6048395d6ebeff4212025414266a29a0-dIo4KG_fw658';
+                    this.iconPath = '/img/personIcon.jpg';
                 }
             }
+        },mounted:function(){
+            this.formatLocalInfo();//需要触发的函数
         }
 
     });
 
     $(function () {
-
+        $.getJSON('./data/data.json',data=>{
+            console.log(data)
+        })
     })
 </script>
 
