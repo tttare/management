@@ -14,9 +14,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +41,17 @@ public class UserController {
     @RequestMapping("/listPage")
     @ResponseBody
     public ResponseParam userListPage(@RequestBody Map<String,Object> params){
+        Page page = userService.findUserPage(params);
+        return new ResponseParam(Contant.SUCCESS,page,null);
+    }
+
+    @GetMapping("/ulist")
+    public String userListPage(){
+        return "user/userList";
+    }
+
+    @PostMapping("/userPage")
+    public ResponseParam userPage(@RequestBody Map<String,Object> params){
         Page page = userService.findUserPage(params);
         return new ResponseParam(Contant.SUCCESS,page,null);
     }

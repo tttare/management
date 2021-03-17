@@ -149,7 +149,8 @@ public class LoginContorller {
         String key = param.get("key");
 
         String verifyCode = param.get(CODE);
-        String sessionCode = (String)request.getSession().getAttribute(CODE);
+        HttpSession session = request.getSession();
+        String sessionCode = (String)session.getAttribute(CODE);
         if(sessionCode == null || !verifyCode.equals(sessionCode)){
             return new ResponseParam(Contant.FAIL,"验证码不正确或已失效,请点击验证码重新输入");
         }
@@ -160,11 +161,11 @@ public class LoginContorller {
         if (loginResult.isLogin()) {
             //将用户信息存入session
             //获取已登录的用户信息
-            User user = (User)SecurityUtils.getSubject().getPrincipal();
+ //           User user = (User)SecurityUtils.getSubject().getPrincipal();
             //生成token
-            String token = MD5Util.EncoderByMd5(user.getUserName() + user.getPassword() + verifyCode);
-            redisUtil.setObject(token,user,verifyTTL*verifyTTL*1000l);
-            return  new ResponseParam(Contant.SUCCESS,token);
+//            String token = MD5Util.EncoderByMd5(user.getUserName() + user.getPassword() + verifyCode);
+//            redisUtil.setObject(token,user,verifyTTL*verifyTTL*1000l);
+            return  new ResponseParam(Contant.SUCCESS,null);
         } else {
             return  new ResponseParam(Contant.FAIL,loginResult.getResult());
         }
