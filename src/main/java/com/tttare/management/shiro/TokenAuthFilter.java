@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author: tttare<br />
  * @since JDK 1.8
  */
-@Component
+//@Component
 public class TokenAuthFilter extends BasicHttpAuthenticationFilter {
 
     @Resource(name = "redisUtil")

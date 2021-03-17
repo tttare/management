@@ -30,6 +30,7 @@ public class User {
     private List<SysRole> roleList;// 一个用户具有多个角色
     @TableField(value = "birth_date")
     private Date birthDate;
+    private String location;
     private Date createDate;//创建时间
     private Date expiredDate;//过期日期
     @TableField(value = "lastLogin_date")

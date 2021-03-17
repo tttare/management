@@ -88,7 +88,7 @@
 
                 <div class="form-group"> 
                      <label class="col-sm-1 control-label">所在地</label>
-                   <el-cascader size="medium" :options="options" v-model="selectedOptions" > <!--@change="handleChange"-->
+                   <el-cascader size="medium" :options="options" v-model="location" > <!--@change="handleChange"-->
                    </el-cascader> 
                 </div>
 
@@ -165,7 +165,7 @@
 <script type="text/javascript" src="../../static/js/axios.min.js"  th:src="@{/js/axios.min.js}"></script>
 <script type="text/javascript" src="../../static/js/crypto-js.js" th:src="@{/js/crypto-js.js}"></script>
 <script type="text/javascript" src="../../static/js/md5.js"  th:src="@{/js/md5.js}"></script>
-<script type="text/javascript" src="../../static/data/data.json"  th:src="@{/data/data.json}"></script>
+<script type="text/javascript" src="../../static/data/location.json" th:src="@{/data/data.json}"></script>
 
 
 <!-- 引入样式 -->
@@ -184,7 +184,7 @@
             email : "",
             passwordComfirm : "",
             birthDate : "1995-06-01",
-            location :"",
+            location :[],
             password:"",
             nickName:"",
             userName:"",
@@ -196,15 +196,7 @@
             emailCodeMsg:"",
             sendFlag:true,
             passwordComfirmMsg:'',
-            selectedOptions:'',
-            options:[{
-                value:"01",
-                label:"湖北",
-                children:[{
-                    value:"0101",
-                    label:"武汉"
-                }]
-            }],
+            options:[],
             iconMsg:'',
             iconPath:'/img/personIcon.jpg',
             haveIcon:false,
@@ -217,14 +209,21 @@
                 }
                 if(this.email.trim().length > 0){
                     if(emailReg.test(this.email)){
-                        var res = this.post('/user/confirmEmail',{
-                            email : this.email
-                        })
-                        if(res){
-                            if(res.code =='000001'){
-                                alert(res.desc);
+                        axios({
+                            method: 'post',
+                            url: "/user/confirmEmail",
+                            data: {
+                                email : this.email
                             }
-                        }
+                        }).then(res=>{
+                            if(res.data.code =='000000'){
+                                //获取验证码
+                                alert(res.data.desc);
+                            }else{
+                                alert(res.data.desc);
+
+                            }
+                        })
                     }
                     else{
                         this.emailMsg='请输入正确的邮箱格式';
@@ -238,6 +237,7 @@
                     return;
                 }else{
                     if(this.passwordComfirm == this.password){
+                        this.passwordComfirmMsg = '';
                         return;
                     }else{
                         this.passwordComfirmMsg = '确认密码与密码不一致,请重新输入';
@@ -285,19 +285,21 @@
                     email : this.email,
                     emailCode : this.emailCode,
                     uploadObject : this.uploadObject,
-                    haveIcon : this.haveIcon
-
+                    haveIcon : this.haveIcon,
+                    birthDate : this.birthDate,
+                    location : this.location
                 };
-                var res = this.post("/user/logon",params);
-
-                if(res){
-                    if(res.data.code=='000001'){
-                        alert(res.desc);
-                    }else if(res.data.code=='000000'){
+                axios({
+                    method: 'post',
+                    url: "/user/logon",
+                    data: params
+                }).then((res)=>{
+                    if(res.data.code == '000000'){
                         window.location.href = '/user/login'
+                    }else{
+                        alert(res.data.desc);
                     }
-                }
-
+                });
             },
             uploadFile:function () {
 
@@ -335,7 +337,15 @@
                 console.log(value)
             },
             formatLocalInfo:function(){
-
+                axios({
+                    method: 'post',
+                    url: "/api/locationInfo",
+                    data: {level:2}
+                }).then((res)=>{
+                    if(res.data.code == '000000'){
+                        this.options = res.data.data;
+                    }
+                 });
             }
         },
         watch :{
@@ -350,11 +360,7 @@
 
     });
 
-    $(function () {
-        $.getJSON('./data/data.json',data=>{
-            console.log(data)
-        })
-    })
+
 </script>
 
 </body>

@@ -30,10 +30,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * ClassName: LoginContorller <br/>
@@ -191,6 +188,16 @@ public class LoginContorller {
         String email = param.getEmail();
         String emailCode = param.getEmailCode();
         String emailCodeCache = redisUtil.getObject(email, String.class);
+        String birthDate = param.getBirthDate();
+        List<String> location = param.getLocation();
+        String locationStr = "";
+        for (String str:location) {
+            locationStr= locationStr+"/"+str;
+        }
+        if(locationStr.length()>0){
+            locationStr = locationStr.substring(0,locationStr.length());
+        }
+
         if(StringUtils.isEmpty(emailCodeCache)){
             rp = new ResponseParam(Contant.FAIL,"验证码已过期");
         }else{
@@ -214,6 +221,8 @@ public class LoginContorller {
                 String  encryptPwd= EncryptUtils.encrypt(password,user.getCredentialsSalt(),this.algorithmName,this.hashIterations);
                 user.setPassword(encryptPwd);
                 user.setNickName(name);
+                user.setBirthDate(CommonUtil.parseDate(birthDate,"yyyy-MM-dd"));
+                user.setLocation(locationStr);
                 //处理用户上传的图像---图像处理失败不能影响用户注册
                 try {
                     if(param.getHaveIcon()){

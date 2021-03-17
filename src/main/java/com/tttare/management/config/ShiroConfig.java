@@ -1,18 +1,12 @@
 package com.tttare.management.config;
 
 import com.tttare.management.shiro.MyShiroRealm;
-import com.tttare.management.shiro.SessionManager;
-import com.tttare.management.shiro.StateLessSubjectFactory;
-import com.tttare.management.shiro.TokenAuthFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.mgt.*;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -36,12 +30,8 @@ import java.util.Properties;
 @Slf4j
 public class ShiroConfig {
 
-    @Autowired
-    private TokenAuthFilter tokenAuthFilter;
-
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
-        System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //自定义的拦截器

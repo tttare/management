@@ -19,6 +19,7 @@ CREATE TABLE `sys_user` (
   `avatar` varchar(32) DEFAULT NULL,
   `email` varchar(64) DEFAULT NULL,
   `status` int(1) DEFAULT NULL,
+  `location` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`userid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

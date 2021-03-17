@@ -1,5 +1,6 @@
 package com.tttare.management.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -113,4 +114,30 @@ public class FileUtil {
         return file;
     }
 
+    /**
+     * base64字符串转化成图片
+     * @param file 文件
+     * @param  encoding 字符集
+     * @return String
+     */
+    public static String readFile(File file,String encoding) {
+        if(StringUtils.isEmpty(encoding)){
+            encoding = "utf-8";
+        }
+        String str=null;
+        try {
+            FileInputStream in=new FileInputStream(file);
+            // size 为字串的长度 ，这里一次性读完
+            int size=in.available();
+            byte[] buffer=new byte[size];
+            in.read(buffer);
+            in.close();
+            str=new String(buffer,encoding);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
 }

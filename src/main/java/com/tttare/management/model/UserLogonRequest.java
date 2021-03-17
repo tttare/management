@@ -3,6 +3,8 @@ package com.tttare.management.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * ClassName: UserLogonRequest <br/>
  * Description: <br/>
@@ -21,5 +23,8 @@ public class UserLogonRequest {
     private String password;
     private UploadObject uploadObject;
     private String userName;
+    private String birthDate;
+    private List<String> location;
+
 }
 

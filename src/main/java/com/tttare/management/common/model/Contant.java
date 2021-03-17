@@ -24,4 +24,7 @@ public class Contant {
 
     public static final int CURRENT = 0;
     public static final int SIZE = 15;
+
+    public static final String LOCATION_INFO="locationInfo";
+
 }
