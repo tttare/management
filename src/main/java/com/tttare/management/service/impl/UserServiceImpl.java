@@ -34,9 +34,16 @@ public class UserServiceImpl implements UserService {
         page.setCurrent(param.get("current")==null?Contant.CURRENT:Integer.valueOf(param.get("pageNumber").toString()));
         //查询条件封装
         LambdaQueryWrapper<User> userQuery = Wrappers.lambdaQuery();
-        userQuery.like(User::getUserName,param.get("userName"));
-        userQuery.like(User::getNickName,param.get("nickName"));
-        userQuery.eq(User::getState,param.get("state"));
+        if(StringUtils.isNotEmpty((String)param.get("userName"))){
+            userQuery.like(User::getUserName,param.get("userName"));
+        }
+        if(StringUtils.isNotEmpty((String)param.get("nickName"))){
+            userQuery.like(User::getNickName,param.get("nickName"));
+        }
+        List<String> state = (List<String>)param.get("state");
+        if(state!=null&&!state.isEmpty()){
+            userQuery.in(User::getState,state);
+        }
         if(StringUtils.isNotEmpty((String)param.get("sortOrder"))){
             userQuery.orderBy(true,param.get("sortOrder").toString().equals(Contant.ORDER_ASC),User::getCreateDate);
         }

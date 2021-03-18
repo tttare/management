@@ -39,6 +39,11 @@ public class UserController {
         return "/index";
     }
 
+    @RequestMapping("/welcome")
+    public String welcome(){
+        return "/welcome";
+    }
+
     @RequestMapping("/listPage")
     @ResponseBody
     public ResponseParam userListPage(@RequestBody Map<String,Object> params){

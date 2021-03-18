@@ -24,13 +24,14 @@
                     <input type="text" class="form-control" id="search-userName" name="role" placeholder="用户名称"
                            th:value="${userName}">
                     <label class="left20">用户昵称</label>
-                    <input type="text" class="form-control" id="search-nickName" name="role" placeholder="用户名称"
+                    <input type="text" class="form-control" id="search-nickName" name="role" placeholder="用户昵称"
                            th:value="${nickName}">
                     <label class="left20">用户状态</label>
-                    <select class="selectpicker" multiple>
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Relish</option>
+                    <select class="selectpicker" multiple id="select-state">
+                        <option value="0">初始化</option>
+                        <option value="1">已启用</option>
+                        <option value="2">已锁定</option>
+                        <option value="3">已删除</option>
                     </select>
                     <input type="button" id="btnQuery" style="margin-left: 20px" class="btn btn-default btn-primary"
                            value="查 询">
@@ -109,6 +110,15 @@
 
     var $table = $("#roleTable");
     $(function () {
+        $('#select-state').selectpicker({
+            noneSelectedText : '请选择'
+        });
+        $(window).on('load',function(){
+            $('#select-state').selectpicker('val','');
+            $('#select-state').selectpicker('refresh');
+        })
+
+
         $table.bootstrapTable({
 //            url: /*[[@{user/role}]]*/ null,        //请求后台的URL（*）
             url:"/userManage/userPage",        //请求后台的URL（*）
@@ -203,9 +213,10 @@
                     sortable: true,
                     formatter:function (value,row,index) {
                         if(row.userName=='admin') return "锁定";
-                        if(value == 0) return "未认证";
-                        else if(value ==1 ) return "正常";
-                        else return "禁用";
+                        if(value == 0) return "初始化";
+                        else if(value ==1 ) return "已启用";
+                        else if(value ==2)  return "已锁定";
+                        else if(value ==3)  return "已删除";
                     }
                 }
 
@@ -218,8 +229,9 @@
                     pageNumber: params.pageNumber, //页码
                     sortName: params.sortName,      //排序列名
                     sortOrder: params.sortOrder,  //排位命令（desc，asc）
-                    searchText: $('#search').val()
-
+                    userName: $('#search-userName').val(),
+                    nickName: $('#search-nickName').val(),
+                    state: $('#select-state').val()
                 };
                 return temp;
             },

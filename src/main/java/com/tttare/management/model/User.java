@@ -16,7 +16,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @TableName(value = "sys_user")
-public class User {
+public class  User{
 
     @TableId(type = IdType.ASSIGN_UUID,value="userid")
     private String userId;
