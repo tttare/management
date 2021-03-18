@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <title>用户管理</title>
 
 
@@ -21,17 +21,8 @@
             <div class="form-inline">
                 <div class="form-group">
                     <label class="left20">用户名称</label>
-                    <input type="text" class="form-control" id="search-userName" name="role" placeholder="用户名称"
-                           th:value="${userName}">
-                    <label class="left20">用户昵称</label>
-                    <input type="text" class="form-control" id="search-nickName" name="role" placeholder="用户名称"
-                           th:value="${nickName}">
-                    <label class="left20">用户状态</label>
-                    <select class="selectpicker" multiple>
-                        <option>Mustard</option>
-                        <option>Ketchup</option>
-                        <option>Relish</option>
-                    </select>
+                    <input type="text" class="form-control" id="search" name="role" placeholder="用户名称"
+                           th:value="${searchText}">
                     <input type="button" id="btnQuery" style="margin-left: 20px" class="btn btn-default btn-primary"
                            value="查 询">
                 </div>
@@ -111,9 +102,9 @@
     $(function () {
         $table.bootstrapTable({
 //            url: /*[[@{user/role}]]*/ null,        //请求后台的URL（*）
-            url:"/userManage/userPage",        //请求后台的URL（*）
+            url:"/user/getUserList",        //请求后台的URL（*）
             method: 'post',                      //请求方式（*）
-            contentType : "application/json", //post方式必须设置,get方式设置application/json
+            contentType : "application/x-www-form-urlencoded;charset=UTF-8", //post方式必须设置,get方式设置application/json
             dataType: 'json',
             striped: true,                      //是否显示行间隔色
             toolbar: '#toolbar',                //工具按钮用哪个容器
@@ -134,7 +125,7 @@
             sortName: 'createTime',
             cardView: false,                    //是否显示详细视图
             detailView: false,                  //是否显示父子表
-            idField: 'userId',
+            idField: 'idField',
             showExport: true,                     //是否显示导出
             exportDataType: "selected",              //basic', 'all', 'selected'.
             exportTypes: ['txt','csv', 'excel','xlsx'],
@@ -174,30 +165,31 @@
                     title: '用户名称',
                     sortable: true
                 }, {
-                    field: 'nickName',
+                    field: 'name',
                     title: '昵称'
                 },{
-                    field: 'birthDate',
-                    title: '生日'
-                },{
-                    field: 'location',
-                    title: '所在地'
+                    field: 'tel',
+                    title: '电话'
                 },{
                     field: 'email',
                     title: '邮箱'
                 },{
-                    field: 'createDate',
+                    field: 'createTime',
                     title: '创建时间',
                     sortable: true
+//                    formatter:function (value,row,index) {
+//                        return  createTimeFormat(value);
+//                    }
+
                 }, {
                     field: 'expiredDate',
                     title: '过期时间',
                     sortable: true
+//                    formatter:function (value,row,index) {
+//                        return  expiredDateFormat(value);
+//                    }
+
                 }, {
-                    field: 'lastLoginDate',
-                        title: '上次登录时间',
-                    sortable: true
-                },{
                     field: 'state',
                     title: '状态',
                     sortable: true,
@@ -210,7 +202,7 @@
                 }
 
             ],
-            queryParamsType: 'json',
+            queryParamsType: '',
             queryParams: function (params) {
                 //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
                 var temp = {

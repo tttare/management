@@ -22,9 +22,12 @@ public class Contant {
     //文件上传 下载 根路径
     public static final String File_UPLOAD_PATH="D:\\upload\\";
 
-    public static final int CURRENT = 0;
+    public static final int CURRENT = 1;
     public static final int SIZE = 15;
 
     public static final String LOCATION_INFO="locationInfo";
+    public static final String ORDER_ASC="asc";
+    public static final String ORDER_DESC="desc";
+
 
 }

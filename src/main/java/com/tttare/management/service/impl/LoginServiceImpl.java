@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,11 @@ public class LoginServiceImpl implements LoginService {
         try {
             currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
             loginResult.setLogin(true);
+            User user = (User)currentUser.getPrincipal();
+            User updateUser = new User();
+            updateUser.setUserId(user.getUserId());
+            updateUser.setLastLoginDate(new Date());
+            userMapper.updateById(updateUser);
             return loginResult;
         }catch (UnknownAccountException e)
         {

@@ -193,10 +193,10 @@ public class LoginContorller {
         List<String> location = param.getLocation();
         String locationStr = "";
         for (String str:location) {
-            locationStr= locationStr+"/"+str;
+            locationStr += str +"/";
         }
         if(locationStr.length()>0){
-            locationStr = locationStr.substring(0,locationStr.length());
+            locationStr = locationStr.substring(0,locationStr.length()-1);
         }
 
         if(StringUtils.isEmpty(emailCodeCache)){
@@ -267,12 +267,6 @@ public class LoginContorller {
         return rp;
     }
 
-    public static void main(String[] args){
-        String fileName ="6b0200dda3cc7cd9a0c248c43601213fb90e9169.jpg";
-        System.out.println(fileName.split(".")[1]);
-        /*String str = EncryptUtils.encrypt("248250f4d36e25f317e66650228eca41","PtkqJZexVNSU2R7f","md5",1);
-        System.out.println(str);*/
-    }
 
     //邮箱验证
     @RequestMapping(value = "/confirmEmail", method = RequestMethod.POST)

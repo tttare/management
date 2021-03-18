@@ -4,6 +4,7 @@ package com.tttare.management.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tttare.management.common.model.Contant;
+import com.tttare.management.common.model.PageResult;
 import com.tttare.management.common.model.ResponseParam;
 import com.tttare.management.common.redis.IRedis;
 import com.tttare.management.common.utils.FileViewUtil;
@@ -51,9 +52,10 @@ public class UserController {
     }
 
     @PostMapping("/userPage")
-    public ResponseParam userPage(@RequestBody Map<String,Object> params){
+    @ResponseBody
+    public PageResult userPage(@RequestBody Map<String,Object> params){
         Page page = userService.findUserPage(params);
-        return new ResponseParam(Contant.SUCCESS,page,null);
+        return new PageResult(page.getTotal(),page.getRecords());
     }
 
     @RequestMapping("/viewFile")

@@ -47,6 +47,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/fonts/**", "anon");
         filterChainDefinitionMap.put("/img/**", "anon");
 
+        filterChainDefinitionMap.put("/userManage/**","anon");
         filterChainDefinitionMap.put("/user/**","anon");
         filterChainDefinitionMap.put("/api/**","anon");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了

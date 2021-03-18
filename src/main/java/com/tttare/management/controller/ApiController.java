@@ -6,8 +6,10 @@ import com.tttare.management.common.model.Contant;
 import com.tttare.management.common.model.ResponseParam;
 import com.tttare.management.common.redis.IRedis;
 import com.tttare.management.common.utils.FileUtil;
+import com.tttare.management.common.utils.LocationUtil;
 import com.tttare.management.model.Option;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.CastUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,23 +34,12 @@ public class ApiController {
     @Resource(name = "redisUtil")
     private IRedis redisUtil;
 
+    @Autowired
+    private LocationUtil locationUtil;
+
     @RequestMapping(value = "/locationInfo",method = RequestMethod.POST)
     public ResponseParam getlocation(@RequestBody Map<String,Object> param){
-        Map<String,Object> location = null;
-        if(redisUtil.get(Contant.LOCATION_INFO)!=null){
-            location = redisUtil.getMap(Contant.LOCATION_INFO,String.class,Object.class);
-        }else {
-            //读取classpath地下区域的json字符串
-            URL resource = this.getClass().getClassLoader().getResource("location.json");
-            File file = new File(resource.getFile());
-            String str = FileUtil.readFile(file,null);
-            if(StringUtils.isEmpty(str)){
-                return null;
-            }
-            location = JSONObject.parseObject(str,Map.class);
-            redisUtil.setObject(Contant.LOCATION_INFO,location,null);
-        }
-
+        Map<String,Object> location = locationUtil.getLocation();
         int level = CastUtils.cast(param.get("level"));
         String key = Contant.LOCATION_INFO+"_"+level;
         List<Option> options = new ArrayList<>();
