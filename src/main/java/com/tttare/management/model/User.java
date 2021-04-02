@@ -62,8 +62,8 @@ public class  User{
         LOCKED("2","已锁定"),
         DELETED("3","已删除");
 
-        private  String code;
-        private String text;
+        public  String code;
+        public String text;
 
         UserState(String code,String text){
             this.code = code;

@@ -10,8 +10,10 @@ import com.tttare.management.common.redis.IRedis;
 import com.tttare.management.common.utils.FileViewUtil;
 import com.tttare.management.model.FileObject;
 
+import com.tttare.management.model.User;
 import com.tttare.management.service.UserService;
 import lombok.extern.java.Log;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +51,15 @@ public class UserController {
     public ResponseParam userListPage(@RequestBody Map<String,Object> params){
         Page page = userService.findUserPage(params);
         return new ResponseParam(Contant.SUCCESS,page,null);
+    }
+
+    /**
+     * 获取当前登录用户
+     * */
+    @RequestMapping(value = "/currentUser",method = RequestMethod.GET)
+    public ResponseParam getCurrentUser(){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        return new ResponseParam(Contant.SUCCESS,user,null);
     }
 
     @GetMapping("/ulist")

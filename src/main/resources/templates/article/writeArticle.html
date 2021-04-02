@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css">
+    <link href="../../static/css/summernote.css" th:src="@{/css/summernote.css}">
+    <script src="../../static/js/jquery-3.3.1.min.js" th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <script src="../../static/js/summernote.js" th:src="@{/js/summernote.js}"></script>
+
+    <title>新增博文</title>
+
+
+</head>
+<body>
+
+<div class="panel-body" style="padding-bottom:0px;">
+
+    <div class="form-group" style="padding-top: 45px">
+        <label class="col-sm-1 control-label"><span style="color: red;font-weight: bold">＊</span>文章标题</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="title" placeholder="文章标题">
+        </div>
+    </div>
+
+    <div class="form-group" style="padding-top: 45px">
+        <label class="col-sm-1 control-label"><span style="color: red;font-weight: bold">＊</span>文章摘要</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="abs" placeholder="文章摘要" maxlength="16">
+        </div>
+    </div>
+    <div class="form-group" style="padding-top: 45px">
+        <textarea id="summernote" class="summernote"></textarea>
+    </div>
+
+</div>
+
+
+
+<script th:inline="javascript">
+    $(function() {
+        $('#summernote').summernote({
+
+            height: 400,    //设置高度
+            toolbar: [      //自定义工具栏
+                ['style',['style']],
+                ['font',['bold','underline','clear']],
+                ['fontname',['fontname']],
+                ['color',['color']],
+                ['para',['ul','ol','paragraph', 'height', 'hr']],
+                ['table',['table']],
+                ['insert',['link','picture','video']],
+                ['view',['fullscreen','codeview','help']]
+            ],
+            tabsize : 2,
+            lang : 'zh-CN',
+            callbacks : {     // 回调函数
+                // 图片上传
+                onImageUpload: function(files) {
+                    var formData = new FormData();
+                    formData.append("file", files[0]);
+                    $.ajax({
+                        url: 'textEdit/imgUpload', //后台文件上传接口
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            //图片插入到summernote中
+                            $("#summernote").summernote('insertImage', data);
+                        },
+                        error: function () {
+                            alert("上传失败")
+                        }
+                    })
+                },
+                //清除word复制的格式
+                onPaste: function (ne) {
+                    var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text/plain');
+                    ne.preventDefault ? ne.preventDefault() : (ne.returnValue = false);
+                    setTimeout(function () {
+                        document.execCommand("insertText", false, bufferText);
+                    }, 10);
+                }
+            }
+        });
+    });
+
+
+
+</script>
+</body>
+</html>

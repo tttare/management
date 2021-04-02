@@ -23,6 +23,35 @@ CREATE TABLE `sys_user` (
   PRIMARY KEY (`userid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tb_comment`;
+
+CREATE TABLE `tb_comment` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(32) DEFAULT NULL,
+  `content` varchar(1024) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `article_id` int NOT NULL,
+  `reply_id` int DEFAULT NULL,
+  `type` int DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `tb_article`;
+
+CREATE TABLE `tb_article` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(32) DEFAULT NULL COMMENT '作者',
+  `title` varchar(128) DEFAULT NULL COMMENT '标题',
+  `abs` varchar(256) DEFAULT NULL COMMENT '摘要',
+  `content` blob COMMENT '内容',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `comment_count` int(10) unsigned zerofill DEFAULT NULL,
+  `like_count` int(10) unsigned zerofill DEFAULT NULL,
+  `view_count` int(10) unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS `tb_role`;
 
 CREATE TABLE `tb_role` (

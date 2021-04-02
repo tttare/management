@@ -43,7 +43,7 @@ import java.util.*;
 @Slf4j
 @Controller
 @RequestMapping(value="/user")
-public class LoginContorller {
+public class LoginController {
 
     @Autowired
     private LoginService loginService;
