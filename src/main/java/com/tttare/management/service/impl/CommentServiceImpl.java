@@ -4,7 +4,7 @@ import com.tttare.management.mapper.ArticleMapper;
 import com.tttare.management.mapper.CommentMapper;
 import com.tttare.management.model.Article;
 import com.tttare.management.model.Comment;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import com.tttare.management.service.CommentService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public void addComment(Map<String, Object> param) {
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         Integer articleId = (Integer)param.get("articleId");
         Article article =  articleMapper.selectById(articleId);
         article.setCommentCount(article.getCommentCount()+1);

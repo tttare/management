@@ -1,7 +1,7 @@
 package com.tttare.management.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Component;
  * @since JDK 1.8
  */
 @Component
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends BaseMapper<SysUser> {
 
 }

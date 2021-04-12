@@ -52,41 +52,42 @@ CREATE TABLE `tb_article` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tb_role`;
+DROP TABLE IF EXISTS `sys_role`;
 
-CREATE TABLE `tb_role` (
+CREATE TABLE `sys_role` (
   `role_id` varchar(32) NOT NULL COMMENT '角色ID',
-  `role_name` varchar(100) NOT NULL COMMENT '角色名称',
-  `remark` varchar(100) DEFAULT NULL COMMENT '角色描述',
+  `role` varchar(100) NOT NULL COMMENT '角色名称',
+  `description` varchar(100) DEFAULT NULL COMMENT '角色描述',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `modified_time` datetime DEFAULT NULL COMMENT '修改时间',
   `status` int(1) DEFAULT '1' COMMENT '是否可用,0:不可用，1：可用',
   PRIMARY KEY (`role_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tb_menu`;
+DROP TABLE IF EXISTS `sys_menu`;
 
-CREATE TABLE `tb_menu` (
-  `menu_id` varchar(32) NOT NULL COMMENT '菜单/按钮ID',
-  `parent_id` bigint(20) DEFAULT NULL COMMENT '上级菜单ID',
-  `menu_name` varchar(50) NOT NULL COMMENT '菜单/按钮名称',
-  `url` varchar(50) DEFAULT NULL COMMENT '菜单URL',
-  `perms` text COMMENT '权限标识',
-  `icon` varchar(50) DEFAULT NULL COMMENT '图标',
-  `type` char(2) NOT NULL COMMENT '类型 0菜单 1按钮',
-  `order_num` bigint(20) DEFAULT NULL COMMENT '排序',
+CREATE TABLE `sys_menu` (
+  `id` varchar(32) NOT NULL COMMENT '菜单ID',
+  `parent_id` varchar(32) DEFAULT NULL COMMENT '父菜单ID',
+  `name` varchar(64) NOT NULL COMMENT '菜单名称',
+  `path` varchar(128) NOT NULL COMMENT '菜单URl',
   `create_time` datetime NOT NULL COMMENT '创建时间',
-  `modified_time` datetime DEFAULT NULL COMMENT '修改时间',
-  `available` int(11) DEFAULT '1' COMMENT '0：不可用，1：可用',
-  `open` int(1) DEFAULT '1' COMMENT '0:不展开，1：展开',
-  PRIMARY KEY (`menu_id`) USING BTREE
+	`status` int(1) DEFAULT '1' COMMENT '是否可用,0:不可用，1：可用',
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `tb_role_menu`;
+DROP TABLE IF EXISTS `sys_user_role`;
 
-CREATE TABLE `tb_role_menu` (
+CREATE TABLE `sys_user_role` (
+  `user_id` varchar(32) NOT NULL COMMENT '用户ID',
+  `role_id` varchar(32) NOT NULL COMMENT '角色ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色菜单关联表';
+
+
+DROP TABLE IF EXISTS `sys_role_menu`;
+
+CREATE TABLE `sys_role_menu` (
   `role_id` varchar(32) NOT NULL COMMENT '角色ID',
-  `menu_id` varchar(32) NOT NULL COMMENT '菜单/按钮ID'
+  `menu_id` varchar(32) NOT NULL COMMENT '菜单ID'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色菜单关联表';
 
 DROP TABLE IF EXISTS `tb_image`;

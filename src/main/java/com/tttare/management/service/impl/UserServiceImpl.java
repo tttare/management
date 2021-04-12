@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tttare.management.common.model.Contant;
 import com.tttare.management.common.utils.LocationUtil;
+import com.tttare.management.mapper.RoleMapper;
 import com.tttare.management.mapper.UserMapper;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysRole;
+import com.tttare.management.model.SysUser;
 import com.tttare.management.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
+    private RoleMapper roleMappper;
+
+    @Autowired
     private LocationUtil locationUtil;
 
     @Override
@@ -33,24 +38,24 @@ public class UserServiceImpl implements UserService {
         page.setSize(param.get("size")==null?Contant.SIZE:Integer.valueOf(param.get("pageSize").toString()));
         page.setCurrent(param.get("current")==null?Contant.CURRENT:Integer.valueOf(param.get("pageNumber").toString()));
         //查询条件封装
-        LambdaQueryWrapper<User> userQuery = Wrappers.lambdaQuery();
+        LambdaQueryWrapper<SysUser> userQuery = Wrappers.lambdaQuery();
         if(StringUtils.isNotEmpty((String)param.get("userName"))){
-            userQuery.like(User::getUserName,param.get("userName"));
+            userQuery.like(SysUser::getUserName,param.get("userName"));
         }
         if(StringUtils.isNotEmpty((String)param.get("nickName"))){
-            userQuery.like(User::getNickName,param.get("nickName"));
+            userQuery.like(SysUser::getNickName,param.get("nickName"));
         }
         List<String> state = (List<String>)param.get("state");
         if(state!=null&&!state.isEmpty()){
-            userQuery.in(User::getState,state);
+            userQuery.in(SysUser::getState,state);
         }
         if(StringUtils.isNotEmpty((String)param.get("sortOrder"))){
-            userQuery.orderBy(true,param.get("sortOrder").toString().equals(Contant.ORDER_ASC),User::getCreateDate);
+            userQuery.orderBy(true,param.get("sortOrder").toString().equals(Contant.ORDER_ASC), SysUser::getCreateDate);
         }
         Page resPage = userMapper.selectPage(page, userQuery);
         List records = resPage.getRecords();
         for(Object record : records){
-            User user = (User)record;
+            SysUser user = (SysUser)record;
             user.setLocation(locationUtil.formatLocationInfo(user.getLocation()));
         }
         Integer count = userMapper.selectCount(userQuery);
@@ -59,13 +64,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUserName(Map<String,Object> param) {
-        List<User> users = userMapper.selectByMap(param);
-        return users.isEmpty()?null:users.get(0);
+    public SysUser findByUserName(Map<String,Object> param) {
+        List<SysUser> users = userMapper.selectByMap(param);
+        if(users.isEmpty()){
+            return null;
+        }
+        SysUser user = users.get(0);
+        List<SysRole> roles = roleMappper.findUserRoleAndMenu(user.getUserId());
+        return user;
     }
 
     @Override
-    public void addUser(User user) {
+    public void addUser(SysUser user) {
         userMapper.insert(user);
     }
 }

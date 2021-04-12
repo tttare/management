@@ -10,7 +10,7 @@ import com.tttare.management.common.redis.IRedis;
 import com.tttare.management.common.utils.FileViewUtil;
 import com.tttare.management.model.FileObject;
 
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import com.tttare.management.service.UserService;
 import lombok.extern.java.Log;
 import org.apache.shiro.SecurityUtils;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 @Log
@@ -58,7 +57,7 @@ public class UserController {
      * */
     @RequestMapping(value = "/currentUser",method = RequestMethod.GET)
     public ResponseParam getCurrentUser(){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
         return new ResponseParam(Contant.SUCCESS,user,null);
     }
 

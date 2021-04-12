@@ -11,10 +11,8 @@ import com.tttare.management.service.LoginService;
 import com.tttare.management.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -161,7 +159,7 @@ public class LoginController {
         if (loginResult.isLogin()) {
             //将用户信息存入session
             //获取已登录的用户信息
- //           User user = (User)SecurityUtils.getSubject().getPrincipal();
+ //           SysUser user = (SysUser)SecurityUtils.getSubject().getPrincipal();
             //生成token
 //            String token = MD5Util.EncoderByMd5(user.getUserName() + user.getPassword() + verifyCode);
 //            redisUtil.setObject(token,user,verifyTTL*verifyTTL*1000l);
@@ -206,7 +204,7 @@ public class LoginController {
                 //作废缓存
                 redisUtil.delete(email);
                 //插入用户
-                User user = new User();
+                SysUser user = new SysUser();
                 user.setUserId(CommonUtil.getUUID());
                 user.setUserName(userName);
                 user.setEmail(email);

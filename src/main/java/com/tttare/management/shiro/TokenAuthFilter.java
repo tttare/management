@@ -1,9 +1,8 @@
 package com.tttare.management.shiro;
 
 import com.tttare.management.common.redis.IRedis;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
@@ -31,7 +30,7 @@ public class TokenAuthFilter extends BasicHttpAuthenticationFilter {
         if(token==null){
             return false;
         }
-        User user = redisUtil.getObject(token, User.class);
+        SysUser user = redisUtil.getObject(token, SysUser.class);
         if(user==null){
             return false;
         }

@@ -7,7 +7,7 @@ import com.tttare.management.common.utils.EmailUtil;
 import com.tttare.management.common.utils.RandomUtils;
 import com.tttare.management.mapper.UserMapper;
 import com.tttare.management.model.LoginResult;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import com.tttare.management.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -68,8 +68,8 @@ public class LoginServiceImpl implements LoginService {
         try {
             currentUser.login(token);// 传到MyAuthorizingRealm类中的方法进行认证
             loginResult.setLogin(true);
-            User user = (User)currentUser.getPrincipal();
-            User updateUser = new User();
+            SysUser user = (SysUser)currentUser.getPrincipal();
+            SysUser updateUser = new SysUser();
             updateUser.setUserId(user.getUserId());
             updateUser.setLastLoginDate(new Date());
             userMapper.updateById(updateUser);
@@ -116,7 +116,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseParam confirmEmail(Map<String,Object> params) {
         // 判断邮箱是否已经被使用
-        List<User> userList = userMapper.selectByMap(params);
+        List<SysUser> userList = userMapper.selectByMap(params);
         if(userList.size() > 0){
             return new ResponseParam(Contant.FAIL,"该邮箱已被注册使用,请更换邮箱");
         }

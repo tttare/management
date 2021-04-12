@@ -1,9 +1,10 @@
 package com.tttare.management.shiro;
 
 
+import com.tttare.management.model.SysMenu;
 import com.tttare.management.model.SysPermission;
 import com.tttare.management.model.SysRole;
-import com.tttare.management.model.User;
+import com.tttare.management.model.SysUser;
 import com.tttare.management.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -41,13 +42,10 @@ public class MyShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         //如果身份认证的时候没有传入User对象，这里只能取到userName
         //也就是SimpleAuthenticationInfo构造的时候第一个参数传递需要User对象
-        User user  = (User)principals.getPrimaryPrincipal();
+        SysUser user  = (SysUser)principals.getPrimaryPrincipal();
 
         for(SysRole role:user.getRoleList()){
             authorizationInfo.addRole(role.getRole());
-            for(SysPermission p:role.getPermissions()){
-                authorizationInfo.addStringPermission(p.getPermission());
-            }
         }
         return authorizationInfo;
     }
@@ -64,7 +62,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
         Map<String,Object> param = new HashMap<>();
         param.put("userName",userName);
-        User user = userService.findByUserName(param);
+        SysUser user = userService.findByUserName(param);
         log.info("----->>user="+user);
         if(user == null){
             return null;
