@@ -103,3 +103,9 @@ CREATE TABLE `tb_image` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `tb_category`;
+
+DROP TABLE IF EXISTS `tb_tag`;
+
+

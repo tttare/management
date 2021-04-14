@@ -1,5 +1,6 @@
 package com.tttare.management.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,8 +17,10 @@ public class Article {
     private String abs;
     private String content;
     //分类
+    @TableField(exist = false)
     private List<Category>  categories;
     //标签
+    @TableField(exist = false)
     private List<Tag>  tags;
     private Date createTime;
     private Date updateTime;

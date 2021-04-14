@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface ArticleService {
 
-    void addArticle(Map<String, Object> param);
+    void addOrUpdateArticle(Map<String, Object> param);
 }
